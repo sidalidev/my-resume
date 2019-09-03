@@ -1,23 +1,66 @@
 import React from 'react'
 import me from './images/me.jpg'
 import styled from 'styled-components'
+import {
+  FaGithub,
+  FaLinkedin,
+  FaLink,
+  // FaPhone,
+  FaAddressCard,
+  FaEnvelope,
+  FaTwitter,
+  FaCar
+} from 'react-icons/fa'
 
 const resume = {
   intro: {
     name: 'Sid Bentifraouine',
     job: 'Ingénieur Frontend',
-    phone: '+33 6 01 06 98 92',
-    email: 'sidbentifraouine@gmail.com',
-    website: 'www.sidbentifraouine.com',
+    links: [
+      // {
+      //   hrefPrefix: 'tel',
+      //   label: '+33 6 01 06 98 92',
+      //   url: '0033601069892',
+      //   icon: <FaPhone />
+      // },
+      {
+        hrefPrefix: 'mailto',
+        label: 'sidbentifraouine@gmail.com',
+        url: 'sidbentifraouine@gmail.com',
+        icon: <FaEnvelope />
+      },
+      {
+        label: 'www.sidbentifraouine.com',
+        url: 'https://www.sidbentifraouine.com',
+        icon: <FaLink />
+      },
+      {
+        label: 'sidbentifraouine',
+        url: 'https://www.linkedin.com/in/sidbentifraouine/',
+        icon: <FaLinkedin />
+      },
+      {
+        label: 'sidbentifraouine',
+        url: 'https://github.com/sidbentifraouine',
+        icon: <FaGithub />
+      },
+      {
+        label: 'sbentifraouine',
+        url: 'https://twitter.com/sbentifraouine',
+        icon: <FaTwitter />
+      }
+    ],
     address: {
-      street: '6 Allée du Château',
-      door: 'Bat. C Appt. 13',
-      zipCode: '59110',
-      city: 'LA MADELEINE',
-      country: 'FRANCE'
+      // street: '6 Allée du Château',
+      // door: 'Bat. C Appt. 13',
+      // zipCode: '59110',
+      city: 'Lille',
+      country: 'France',
+      url: 'https://www.google.com/maps/place/Lille/@50.6310622,3.0120553',
+      icon: <FaAddressCard />
     },
     pitch:
-      'Je suis une personne curieuse, qui aime apprendre et partager avec les autres, relever de nouveaux défis dans le but de me surpasser, afin d’essayer d’être le changement que je veux voir dans ce monde.'
+      "Je design et m'occupe de la conception et ingénierie de votre solution Web et Native."
   },
   experience: [
     {
@@ -173,35 +216,55 @@ function App() {
         <img src={me} alt='logo' />
         <h1>{resume.intro.name}</h1>
         <h2>{resume.intro.job}</h2>
+        <hr />
       </Header>
       <Content>
         <Sidebar>
           <ul>
+            {resume.intro.links.map(({ label, url, hrefPrefix, icon }) => (
+              <li key={url}>
+                {icon}
+                {hrefPrefix ? (
+                  <a href={`${hrefPrefix}:${url}`}>{label}</a>
+                ) : (
+                  <a href={url} target='_blank' rel='noopener noreferrer'>
+                    {label}
+                  </a>
+                )}
+              </li>
+            ))}
             <li>
-              <a href={`tel:${resume.intro.phone}`}>{resume.intro.phone}</a>
-            </li>
-            <li>
-              <a href={`mailto:${resume.intro.email}`}>{resume.intro.email}</a>
-            </li>
-            <li>
+              {resume.intro.address.icon}
               <a
-                href={`http://${resume.intro.website}`}
+                href={resume.intro.address.url}
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                {resume.intro.website}
+                {resume.intro.address.street && (
+                  <>
+                    {resume.intro.address.street}
+                    <br />
+                  </>
+                )}
+                {resume.intro.address.door && (
+                  <>
+                    {resume.intro.address.door}
+                    <br />
+                  </>
+                )}
+                {resume.intro.address.zipCode && (
+                  <>
+                    {resume.intro.address.zipCode}
+                    <br />
+                  </>
+                )}
+                {resume.intro.address.city}, {resume.intro.address.country}
               </a>
             </li>
             <li>
-              <p>
-                {resume.intro.address.street} <br /> {resume.intro.address.door}{' '}
-                <br />
-                {resume.intro.address.zipCode} {resume.intro.address.city}{' '}
-                <br />
-                {resume.intro.address.country}
-              </p>
+              <FaCar />
+              <p>Permis B</p>
             </li>
-            <li>Permis B</li>
           </ul>
         </Sidebar>
         <AboutMe>
@@ -233,7 +296,7 @@ function App() {
                         <p>{summary}</p>
                         <ul>
                           {actions.map((actionName) => (
-                            <li>{actionName}</li>
+                            <li key={actionName}>{actionName}</li>
                           ))}
                         </ul>
                         <p>
@@ -278,11 +341,11 @@ function App() {
                 <h4>{domain}</h4>
                 <p>
                   {skills.map(({ label, level }, index) => (
-                    <>
+                    <span key={label}>
                       {label}
                       {level && ` (${level})`}
                       {index !== skills.length - 1 ? `, ` : '.'}
-                    </>
+                    </span>
                   ))}
                 </p>
               </div>
@@ -291,8 +354,7 @@ function App() {
           <Hobbies>
             <h3>Loisirs</h3>
             <p>
-              Volontariat avec l’association{' '}
-              <strong>“Aide aux Orphelins”</strong> (Empathie), Dessin
+              Volontariat avec l’association "Aide aux Orphelins", Dessin
               & peinture (Imagination), Piano (Autodidacte), Football (Travail
               d’équipe et Leadership), Randonnée (Aventure), Pêche (Patience),
               Cyclisme (Persévérance)
@@ -318,9 +380,15 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  hr {
+    width: 10rem;
+    height: 0.1rem;
+    background-color: #5f99bd;
+    margin-bottom: 1rem;
+  }
   img {
     border-radius: 50%;
-    width: 6rem;
+    width: 7rem;
   }
   h1 {
     text-transform: uppercase;
@@ -335,15 +403,21 @@ const Content = styled.div`
 `
 const Sidebar = styled.div`
   width: 30vw;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   ul {
     list-style: none;
     li {
+      display: flex;
+      align-items: center;
       margin-bottom: 0.5rem;
       a {
+        margin-left: 0.7rem;
         text-decoration: none;
         color: black;
         font-weight: 600;
+      }
+      p {
+        margin-left: 0.7rem;
       }
     }
   }
@@ -369,10 +443,8 @@ const Education = styled.div`
 `
 
 const Abilities = styled.div`
-  div {
-    h4 {
-      color: #6babd2;
-    }
+  h4 {
+    color: #5f99bd;
   }
 `
 const Hobbies = styled.div``
